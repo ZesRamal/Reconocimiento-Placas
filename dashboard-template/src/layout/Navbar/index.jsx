@@ -1,11 +1,12 @@
-import { FiDatabase, FiHome, FiUserPlus, FiTable, FiLogOut } from "react-icons/fi";
+import { FiHome, FiUserPlus, FiTable, FiLogOut } from "react-icons/fi";
+import { PiSecurityCameraFill } from "react-icons/pi";
 import style from './navbar.module.css'
 import { Link, useLocation } from "react-router-dom";
 
 const listaURLs = [
-    { path: '/', pathName: 'home', icon: FiHome },
-    { path: '/register', pathName: 'register', icon: FiUserPlus },
-    { path: '/registry', pathName: 'registry', icon: FiTable },
+    { path: '/', pathName: 'inicio', icon: FiHome },
+    { path: '/registrar', pathName: 'Registrar', icon: FiUserPlus },
+    { path: '/registro', pathName: 'registro', icon: FiTable },
     // { path: '/graphs', pathName: 'graphs', icon: FiBarChart },
 ]
 
@@ -19,7 +20,7 @@ const Navbar = () => {
             {
                 location.pathname != "/login" ?
                     <div className={style.navbarBase}>
-                        <div className={style.navIcon}><FiDatabase size={"5rem"} color='#fdf384' /></div>
+                        <div className={style.navIcon}><PiSecurityCameraFill size={"5rem"} color='#fdf384' style={{ transform: "scaleX(-1)" }} /></div>
                         <nav style={{ marginTop: "1rem" }}>
                             <ul style={{ paddingLeft: "0.5rem", listStyleType: "none" }}>
                                 {

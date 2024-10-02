@@ -6,7 +6,7 @@ const index = () => {
 
     return (
         <div className={style.register}>
-            <center className={style.title}>Register</center>
+            <center className={style.title}>Registrar Criminal</center>
             <Form />
         </div>
     )

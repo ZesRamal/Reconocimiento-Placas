@@ -21,8 +21,8 @@ function App() {
         <Routes>
           <Route>
             <Route path="/" Component={Home} />
-            <Route path="/register" Component={Register} />
-            <Route path="/registry" Component={Registry} />
+            <Route path="/registrar" Component={Register} />
+            <Route path="/registro" Component={Registry} />
           </Route>
           <Route path="/login" Component={Login} />
         </Routes>

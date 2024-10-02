@@ -4,7 +4,7 @@ import Table from "../../components/Table/Table"
 const index = () => {
     return (
         <div className={style.registry}>
-            <center className={style.title}>Registry</center>
+            <center className={style.title}>Registro</center>
             <div className={style.tableDiv}>
                 <Table />
             </div>
