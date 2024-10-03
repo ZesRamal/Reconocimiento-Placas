@@ -62,7 +62,7 @@ const ListingTable = () => {
                                     <th scope="col">Nombre</th>
                                     <th scope="col">Crimen</th>
                                     <th scope="col">Fecha Registro</th>
-                                    <th scope="col">Visto ultima vez</th>
+                                    {/* <th scope="col">Visto ultima vez</th> */}
                                     <th scope="col">Foto</th>
                                     <th scope="col"></th>
                                 </tr>
@@ -75,7 +75,7 @@ const ListingTable = () => {
                                             <th>{criminal.name}</th>
                                             <td>{criminal.crime}</td>
                                             <td>{criminal.dateRegistered}</td>
-                                            <td>{criminal.lastSeen}</td>
+                                            {/* <td>{criminal.lastSeen}</td> */}
                                             <td><img src={criminal.imageUrl} height={"100rem"} width={"150rem"} /></td>
                                             <td><MdOutlineDeleteForever size={"2rem"} onClick={() => handlePopUp(criminal.id)} className="delete" /></td>
                                         </tr>
