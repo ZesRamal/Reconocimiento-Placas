@@ -25,3 +25,7 @@ tr:nth-of-type(even) {
     background-color: rgb(55 65 81);
     color: white;
 }
+
+.delete:hover{
+    cursor: pointer;
+}

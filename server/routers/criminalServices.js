@@ -19,6 +19,7 @@ export const addCriminal = async (name, crime, imageUrl) => {
 export const getCriminals = async () => {
   const query = fql`
     criminals.all() {
+      id,
       name,
       crime,
       imageUrl,
@@ -28,4 +29,12 @@ export const getCriminals = async () => {
   `;
   const result = await client.query(query);
   return result.data.data;
+};
+
+// Función para borrar un delincuente por ID
+export const deleteCriminal = async (id) => {
+  const query = fql`
+    criminals.byId(${id})!.delete()
+  `;
+  return await client.query(query);
 };

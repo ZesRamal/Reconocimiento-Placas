@@ -1,5 +1,5 @@
 import "./loginForm.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 
@@ -8,7 +8,7 @@ const LoginForm = () => {
         username: '',
         password: '',
     });
-
+    const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -31,9 +31,8 @@ const LoginForm = () => {
                 password: loginData.password,
             });
             const data = await response.data;
-            console.log(data);
-
             localStorage.setItem('token', data.token);
+            navigate("/", { replace: true })
             window.location.reload();
         } catch (error) {
             console.error('Registration error:', error);

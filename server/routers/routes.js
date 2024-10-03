@@ -3,9 +3,9 @@ import fs from 'fs';
 import path from 'path';
 import multer from 'multer';
 import { fileURLToPath } from 'url';
-import { addUser,getUserByUsername } from './userServices.js';
-import { addCriminal,getCriminals } from './criminalServices.js';
-import cloudinary from 'cloudinary';
+import { addUser, getUserByUsername } from './userServices.js';
+import { addCriminal, getCriminals , deleteCriminal } from './criminalServices.js';
+import { v2 as cloudinary } from 'cloudinary'; // Asegúrate de importar cloudinary.v2
 import jwt from 'jsonwebtoken';
 
 const router = express.Router();
@@ -32,8 +32,12 @@ const upload = multer({ storage });
 // Ruta para subir imágenes
 router.post('/upload', upload.single('image'), async (req, res) => {
   try {
-    const result = await cloudinary.v2.uploader.upload(req.file.path); // Subir a Cloudinary
-    // Eliminar el archivo temporal
+    // Subir a Cloudinary usando el upload preset
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      upload_preset: 'third-party',
+    });
+
+    // Eliminar el archivo temporal después de la carga
     fs.unlinkSync(req.file.path);
 
     return res.status(200).json({
@@ -45,7 +49,6 @@ router.post('/upload', upload.single('image'), async (req, res) => {
     return res.status(500).json({ message: 'Error uploading image' });
   }
 });
-
 
 // Ruta para registrar un nuevo usuario
 router.post('/register', async (req, res) => {
@@ -86,11 +89,10 @@ router.post('/login', async (req, res) => {
     const token = jwt.sign({ username: user.username }, process.env.JWT_SECRET, { expiresIn: '1h' });
     return res.status(200).json({ message: 'Login successful', token, user });
   } catch (error) {
-    console.error(error); // Agrega esta línea para ver el error en la consola
+    console.error(error);
     return res.status(500).json({ message: 'Error logging in' });
   }
 });
-
 
 // Ruta para registrar un delincuente
 router.post('/register-criminal', upload.single('image'), async (req, res) => {
@@ -103,10 +105,15 @@ router.post('/register-criminal', upload.single('image'), async (req, res) => {
 
   try {
     // Subir imagen a Cloudinary
-    const result = await cloudinary.v2.uploader.upload(imageUrl);
+    const result = await cloudinary.uploader.upload(imageUrl, {
+      upload_preset: 'third-party', // Usa el preset adecuado
+    });
 
     // Usar el servicio para agregar el delincuente
     const response = await addCriminal(name, crime, result.secure_url);
+
+    // Eliminar el archivo temporal
+    fs.unlinkSync(req.file.path);
 
     return res.status(201).json({
       message: 'Criminal registered successfully',
@@ -132,5 +139,20 @@ router.get('/criminals', async (req, res) => {
   }
 });
 
+router.delete('/criminals/:id', async (req, res) => {
+  const { id } = req.params;
+
+  if (!id) {
+    return res.status(400).json({ message: 'Criminal ID is required' });
+  }
+
+  try {
+    await deleteCriminal(id);
+    return res.status(204).json({ message: 'Criminal deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Error deleting criminal' });
+  }
+});
 
 export default router;

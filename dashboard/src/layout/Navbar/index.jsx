@@ -3,7 +3,7 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import { GoLog } from "react-icons/go";
 import { PiSecurityCameraFill } from "react-icons/pi";
 import "../Navbar/navBar.css"
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 
 const listaURLs = [
@@ -14,6 +14,7 @@ const listaURLs = [
 ]
 
 const Navbar = () => {
+    const navigate = useNavigate();
     const navRef = useRef(null);
     const [showNav, setShowNav] = useState(false)
     const location = useLocation();
@@ -27,7 +28,8 @@ const Navbar = () => {
 
     const handleLogOut = () => {
         localStorage.removeItem('token');
-        window.location.reload()
+        navigate("/login", { replace: true })
+        window.location.reload();
     }
 
     useEffect(() => {
