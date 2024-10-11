@@ -10,6 +10,8 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import fileUpload from 'express-fileupload';  // Agregado para manejar la subida de archivos
 import { v2 as cloudinary } from 'cloudinary';  // Importar Cloudinary
+import { initializeApp } from "firebase/app";
+import { getFirestore, collection, addDoc, getDocs } from "firebase/firestore"; // Importar Firestore
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -25,42 +27,18 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const platesFilePath = path.join(__dirname, 'data', 'plates.json');
-const usersFilePath = path.join(__dirname, 'data', 'users.json');
-
-// Función para cargar usuarios desde el archivo JSON
-const loadUsers = () => {
-    try {
-        const dataBuffer = fs.readFileSync(usersFilePath);
-        const dataJSON = dataBuffer.toString();
-        return JSON.parse(dataJSON);
-    } catch (error) {
-        return [];
-    }
+// Configuración Firebase
+const firebaseConfig = {
+    apiKey: process.env.FIREBASE_API_KEY,
+    authDomain: process.env.FIREBASE_AUTH_DOMAIN,  
+    projectId: process.env.FIREBASE_PROJECT_ID,
+    storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.FIREBASE_APP_ID,
 };
 
-// Función para guardar usuarios en el archivo JSON
-const saveUsers = (users) => {
-    const dataJSON = JSON.stringify(users, null, 2);
-    fs.writeFileSync(usersFilePath, dataJSON);
-};
-
-// Función para cargar placas desde el archivo JSON
-const loadPlates = () => {
-    try {
-        const dataBuffer = fs.readFileSync(platesFilePath);
-        const dataJSON = dataBuffer.toString();
-        return JSON.parse(dataJSON);
-    } catch (error) {
-        return [];
-    }
-};
-
-// Función para guardar placas en el archivo JSON
-const savePlates = (plates) => {
-    const dataJSON = JSON.stringify(plates, null, 2);
-    fs.writeFileSync(platesFilePath, dataJSON);
-};
+const firebaseApp = initializeApp(firebaseConfig);
+const db = getFirestore(firebaseApp);
 
 // Ruta de registro
 app.post('/register', async (req, res) => {
@@ -70,8 +48,11 @@ app.post('/register', async (req, res) => {
         return res.status(400).json({ error: 'Las contraseñas no coinciden' });
     }
 
-    const users = loadUsers();
-    const userExists = users.find(user => user.username === username);
+    // Comprobar si el usuario ya existe
+    const usersCollection = collection(db, 'users');
+    const userExistsSnapshot = await getDocs(usersCollection);
+    const userExists = userExistsSnapshot.docs.find(doc => doc.data().username === username);
+    
     if (userExists) {
         return res.status(400).json({ error: 'El usuario ya está registrado' });
     }
@@ -79,24 +60,29 @@ app.post('/register', async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     const newUser = { username, password: hashedPassword };
-    users.push(newUser);
-    saveUsers(users);
+    
+    // Guardar el nuevo usuario en Firestore
+    await addDoc(usersCollection, newUser);
     res.status(201).json({ message: 'Usuario registrado exitosamente' });
 });
 
 // Ruta de login
 app.post('/login', async (req, res) => {
     const { username, password } = req.body;
-    const users = loadUsers();
-    const user = users.find(user => user.username === username);
+    const usersCollection = collection(db, 'users');
+    const userSnapshot = await getDocs(usersCollection);
+    
+    const user = userSnapshot.docs.find(doc => doc.data().username === username);
     if (!user) {
         return res.status(400).json({ error: 'Usuario o contraseña incorrectos' });
     }
-    const isMatch = await bcrypt.compare(password, user.password);
+
+    const isMatch = await bcrypt.compare(password, user.data().password);
     if (!isMatch) {
         return res.status(400).json({ error: 'Usuario o contraseña incorrectos' });
     }
-    const token = jwt.sign({ username: user.username }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+    const token = jwt.sign({ username: user.data().username }, process.env.JWT_SECRET, { expiresIn: '1h' });
     res.json({ token });
 });
 
@@ -146,9 +132,8 @@ app.post('/api/recognize-plate', async (req, res) => {
                     imageUrl: cloudinaryResult.secure_url  // URL de Cloudinary
                 };
 
-                const plates = loadPlates();
-                plates.push(newPlateRecord);
-                savePlates(plates);
+                // Guardar el registro en Firestore
+                await addDoc(collection(db, 'plates'), newPlateRecord);
 
                 res.json({ message: 'Placa detectada y almacenada', plate: newPlateRecord });
             } catch (error) {
@@ -163,8 +148,11 @@ app.post('/api/recognize-plate', async (req, res) => {
 });
 
 // Ruta para obtener todas las placas registradas
-app.get('/api/plates', (req, res) => {
-    const plates = loadPlates();
+app.get('/api/plates', async (req, res) => {
+    const platesCollection = collection(db, 'plates');
+    const platesSnapshot = await getDocs(platesCollection);
+    
+    const plates = platesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
     res.json(plates);
 });
 
