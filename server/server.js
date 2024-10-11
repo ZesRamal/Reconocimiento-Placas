@@ -5,6 +5,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import axios from 'axios';
 import FormData from 'form-data';
+import cors from 'cors';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -19,6 +20,12 @@ const __dirname = path.dirname(__filename);
 const app = express();
 app.use(express.json());
 app.use(fileUpload());  // Middleware para manejo de archivos
+
+// Configurar CORS
+const corsOptions = {
+    origin: "http://localhost:5173",
+    credentials: true
+  };
 
 // Configuración de Cloudinary
 cloudinary.config({
@@ -156,8 +163,11 @@ app.get('/api/plates', async (req, res) => {
     res.json(plates);
 });
 
-const port = 3000;
+const PORT = process.env.PORT || 3000;
 
-app.listen(port, () => {
-    console.log(`Servidor escuchando en el puerto ${port}`);
+
+app.use(cors(corsOptions));
+
+app.listen(PORT, () => {
+    console.log(`Servidor escuchando en el puerto ${PORT}`);
 });

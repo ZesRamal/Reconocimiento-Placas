@@ -1,15 +1,23 @@
-import "./logTable.css"
 import { useState, useEffect } from "react";
+import "./logTable.css";
 
 const LogTable = () => {
-    const [users, setUsers] = useState([]);
+    const [plates, setPlates] = useState([]);
+
     useEffect(() => {
-        const fetchUsers = async () => {
-            setUsers([])
+        const fetchPlates = async () => {
+            try {
+                const response = await fetch('http://localhost:3000/api/plates');  // Cambia a la URL completa
+                const data = await response.json();  // Convertimos a JSON los datos recibidos
+                setPlates(data);  // Guardamos los datos en el estado
+            } catch (error) {
+                console.error("Error fetching plates:", error);
+            }
         };
 
-        fetchUsers();
+        fetchPlates();
     }, []);
+
     return (
         <div style={{ width: "100%" }}>
             <table className="table">
@@ -17,24 +25,25 @@ const LogTable = () => {
                     <tr>
                         <th scope="col">ID</th>
                         <th scope="col">Número de Placa</th>
-                        <th scope="col">Evento</th>
                         <th scope="col">Fecha/Hora</th>
                         <th scope="col">Fotograma</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {/* users.map((user) => (
-                        <tr key={user.id}>
-                            <th scope="row">{user.name}</th>
-                            <td>{user.email}</td>
-                            <td>{user.notes}</td>
-                            <td>{user.registerTime.toDate().toString()}</td>
+                    {plates.map((plate) => (
+                        <tr key={plate.id}>
+                            <th scope="row">{plate.id}</th>
+                            <td>{plate.plate}</td>
+                            <td>{new Date(plate.timestamp).toLocaleString()}</td>
+                            <td>
+                                <img src={plate.imageUrl} alt="Fotograma de la placa" width="100" />
+                            </td>
                         </tr>
-                        )) */}
+                    ))}
                 </tbody>
             </table>
-        </div >
-    )
+        </div>
+    );
 }
 
-export default LogTable
+export default LogTable;

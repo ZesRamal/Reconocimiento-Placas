@@ -1,16 +1,38 @@
 import cv2
+import os
 import requests
+import firebase_admin
+from firebase_admin import credentials, firestore
+import cloudinary
+import cloudinary.uploader
+from dotenv import load_dotenv
+from datetime import datetime  # Importa el módulo datetime
+
+# Cargar variables de entorno desde el archivo .env
+load_dotenv()
+
+# Inicializa Firebase
+cred = credentials.Certificate('/home/nosey/Descargas/placas-d75f3-firebase-adminsdk-yqph7-09a552f8e6.json')  # Reemplaza con la ruta a tu archivo de credenciales
+firebase_admin.initialize_app(cred)
+db = firestore.client()
+
+# Configura Cloudinary
+cloudinary.config(
+    cloud_name=os.getenv('CLOUDINARY_CLOUD_NAME'),
+    api_key=os.getenv('CLOUDINARY_API_KEY'),
+    api_secret=os.getenv('CLOUDINARY_API_SECRET')
+)
 
 # Configura la cámara web
-cap = cv2.VideoCapture(0)  # 0 es el ID de la cámara web, si tienes más de una puedes cambiarlo
+cap = cv2.VideoCapture(0)  # 0 es el ID de la cámara web, cambia si tienes más de una
 
 # Asegúrate de que la cámara se haya inicializado correctamente
 if not cap.isOpened():
     print("No se pudo abrir la cámara")
     exit()
 
-# Reemplaza con tu token de API
-api_token = '014aad6757469a81d894a79986a460eb876d5df9'
+# Obtener el token de la API desde el archivo .env
+api_token = os.getenv('PLATE_RECOGNIZER_API_KEY')
 
 def detectar_placa(frame):
     """
@@ -50,7 +72,14 @@ def detectar_placa(frame):
                     return True, frame  # Devuelve que se ha detectado una placa
     return False, frame
 
-while True:
+# Conjunto para almacenar placas detectadas
+placas_detectadas = set()
+
+# Contador de frames procesados
+frames_procesados = 0
+max_frames = 100  # Limitar a 100 frames para evitar bucle infinito
+
+while frames_procesados < max_frames:
     # Captura frame por frame
     ret, frame = cap.read()
 
@@ -83,8 +112,40 @@ while True:
             files=files
         )
 
-        # Imprimir el resultado de la API
-        print(response.json())
+        # Procesar la respuesta
+        result = response.json()
+        print(result)
+
+        # Almacena los datos en Firestore solo si hay resultados
+        if 'results' in result and len(result['results']) > 0:
+            # Extrae la información de la placa
+            plate_data = result['results'][0]
+            plate_number = plate_data.get('plate', 'Desconocido')
+
+            # Verifica si la placa ya ha sido detectada
+            if plate_number not in placas_detectadas:
+                # Agrega la placa al conjunto de placas detectadas
+                placas_detectadas.add(plate_number)
+
+                # Guardar la imagen en Cloudinary
+                upload_response = cloudinary.uploader.upload(image_jpg.tobytes(), resource_type='image')
+                image_url = upload_response['secure_url']  # URL segura de la imagen almacenada
+
+                # Obtener el timestamp actual como cadena
+                timestamp_string = datetime.now().isoformat()  # Formato ISO 8601
+
+                # Almacena en Firestore
+                db.collection('plates').add({
+                    'timestamp': timestamp_string,  # Almacena el timestamp como string
+                    'plate': plate_number,
+                    'imageUrl': image_url
+                })
+                print(f"Datos de la placa almacenados: {plate_number}, URL de la imagen: {image_url}")
+            else:
+                print(f"La placa {plate_number} ya ha sido registrada.")
+
+    # Aumentar el contador de frames procesados
+    frames_procesados += 1
 
     # Romper el bucle si se presiona la tecla 'q'
     if cv2.waitKey(1) & 0xFF == ord('q'):
