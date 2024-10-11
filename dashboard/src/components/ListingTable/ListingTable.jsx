@@ -84,7 +84,7 @@ const ListingTable = () => {
                             </tbody>
                         </table>
                     </>
-                    : <div><center style={{ margin: "20%" }}>No hay registros</center></div>
+                    : <div><center style={{ margin: "20%" }}>Cargando...</center></div>
             }
         </div >
     )

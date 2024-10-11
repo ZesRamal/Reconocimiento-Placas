@@ -8,9 +8,9 @@ import { useState, useEffect, useRef } from "react";
 
 const listaURLs = [
     { path: '/', pathName: 'inicio', icon: FiHome },
-    { path: '/registrar', pathName: 'Registrar', icon: FiUserPlus },
-    { path: '/listado', pathName: 'listado', icon: FiTable },
-    // { path: '/registro', pathName: 'registro', icon: GoLog },
+    // { path: '/registrar', pathName: 'Registrar', icon: FiUserPlus },
+    // { path: '/listado', pathName: 'listado', icon: FiTable },
+    { path: '/registro', pathName: 'registro', icon: GoLog },
 ]
 
 const Navbar = () => {

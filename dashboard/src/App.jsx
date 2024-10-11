@@ -16,7 +16,7 @@ function App() {
           <Route path="/" element={isAuthenticated ? <Home /> : <Navigate to="/login" replace />} />
           <Route path="/registrar" element={isAuthenticated ? <Register /> : <Navigate to="/login" replace />} />
           <Route path="/listado" element={isAuthenticated ? <List /> : <Navigate to="/login" replace />} />
-          {/* <Route path="/registro" element={isAuthenticated ? <Registry /> : <Navigate to="/login" replace />} /> */}
+          <Route path="/registro" element={isAuthenticated ? <Registry /> : <Navigate to="/login" replace />} />
         </Route>
         <Route path="/register" element={!isAuthenticated ? <CreateAccount /> : <Navigate to="/" replace />} />
         <Route path="/login" element={!isAuthenticated ? <Login /> : <Navigate to="/" replace />} />

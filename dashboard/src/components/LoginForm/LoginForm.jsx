@@ -26,7 +26,7 @@ const LoginForm = () => {
 
     async function checkLogin() {
         try {
-            const response = await axios.post("http://localhost:1100/api/login", {
+            const response = await axios.post("http://localhost:3000/login", {
                 username: loginData.username,
                 password: loginData.password,
             });
@@ -36,7 +36,7 @@ const LoginForm = () => {
             window.location.reload();
         } catch (error) {
             console.error('Registration error:', error);
-            window.alert("Usuario o contraseña incorrecto")
+            window.alert(error)
         }
     }
     return (

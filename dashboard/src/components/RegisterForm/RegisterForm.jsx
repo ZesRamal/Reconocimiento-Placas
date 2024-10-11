@@ -11,37 +11,31 @@ const RegisterForm = () => {
         confirmPassword: '',
     });
 
-    async function registerCriminal() {
-        try {
-            await axios.post("http://localhost:1100/api/register", {
-                username: registerData.username,
-                password: registerData.password,
-            });
-            document.getElementById("register").reset();
-            setRegisterData({
-                username: '',
-                password: '',
-                confirmPassword: '',
-            })
-            navigate("/login")
-        } catch (error) {
-            console.error('Registration error:', error);
-            window.alert("Error al conectar con el servidor")
-        }
-    }
-
     const handleSubmit = async (event) => {
         event.preventDefault();
+
         if (registerData.username && registerData.password && registerData.confirmPassword) {
-            if (registerData.password == registerData.confirmPassword) {
-                await registerCriminal()
-            } else {
-                window.alert("Ambas contraseñas son diferentes.")
+            try {
+                await axios.post("http://localhost:3000/register", {
+                    username: registerData.username,
+                    password: registerData.password,
+                    confirmPassword: registerData.confirmPassword
+                });
+                document.getElementById("register").reset();
+                setRegisterData({
+                    username: '',
+                    password: '',
+                    confirmPassword: '',
+                })
+                navigate("/login")
+            } catch (error) {
+                console.error("Error:", error.response.data.error);
+                window.alert(error.response.data.error);
             }
         } else {
-            window.alert("Por favor llena todos los espacios.")
+            window.alert("Por favor llena todos los espacios.");
         }
-    }
+    };
     return (
         <div style={{ width: "100%" }}>
             <div className="box">
@@ -59,7 +53,7 @@ const RegisterForm = () => {
                             ...registerData,
                             password: e.target.value
                         })} />
-                    <label htmlFor="confirmPassword">Contraseña</label>
+                    <label htmlFor="confirmPassword">Confirmar Contraseña</label>
                     <input className="input" type="password" id="confirmPassword" autoComplete="off" placeholder="Confirmar Contraseña"
                         onChange={e => setRegisterData({
                             ...registerData,
