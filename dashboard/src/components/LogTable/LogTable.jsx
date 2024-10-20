@@ -4,18 +4,24 @@ import "./logTable.css";
 const LogTable = () => {
     const [plates, setPlates] = useState([]);
 
-    useEffect(() => {
-        const fetchPlates = async () => {
-            try {
-                const response = await fetch('http://localhost:3000/api/plates');  // Cambia a la URL completa
-                const data = await response.json();  // Convertimos a JSON los datos recibidos
-                setPlates(data);  // Guardamos los datos en el estado
-            } catch (error) {
-                console.error("Error fetching plates:", error);
-            }
-        };
+    const fetchPlates = async () => {
+        try {
+            const response = await fetch('http://localhost:3000/api/plates');  // Cambia a la URL completa
+            const data = await response.json();  // Convertimos a JSON los datos recibidos
+            setPlates(data);  // Guardamos los datos en el estado
+        } catch (error) {
+            console.error("Error fetching plates:", error);
+        }
+    };
 
-        fetchPlates();
+    useEffect(() => {
+        fetchPlates(); // Llama a la función al cargar el componente
+
+        // Configura el polling
+        const intervalId = setInterval(fetchPlates, 5000); // Actualiza cada 5 segundos
+
+        // Limpieza del efecto
+        return () => clearInterval(intervalId);
     }, []);
 
     return (
