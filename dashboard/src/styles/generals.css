@@ -23,6 +23,7 @@ body {
 
 html{
     overflow: hidden;
+    min-height: 100vh;
 }
 
 @media (min-width: 390px) {
@@ -51,3 +52,7 @@ html{
         font-size: 1.75rem;
     }
 }
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #d9e6f7 #111827;
+  }

@@ -1,4 +1,4 @@
-import "./registry.css"
+import "./log.css"
 import LogTable from "../../components/LogTable/LogTable"
 
 const index = () => {

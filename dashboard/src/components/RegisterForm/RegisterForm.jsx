@@ -31,6 +31,7 @@ const RegisterForm = () => {
                 await apiClient.post("/register", { // Usa el cliente Axios configurado
                     username: registerData.username,
                     password: registerData.password,
+                    confirmPassword: registerData.confirmPassword
                 });
                 document.getElementById("register").reset();
                 setRegisterData({
