@@ -1,43 +1,37 @@
-from flask import Flask, session, jsonify, request
-from flask_session import Session
+from flask import Flask, jsonify, request
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity, create_refresh_token
 from flask_cors import CORS
 from dotenv import load_dotenv
+import firebase_admin
+from firebase_admin import credentials, firestore
 import os
-import json
+from datetime import timedelta
 
 # Cargar variables del archivo .env
 load_dotenv()
 
 app = Flask(__name__)
 
-# Configurar Flask-Session con la SECRET_KEY del archivo .env
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
-app.config['SESSION_TYPE'] = 'filesystem'
+# Configurar JWT
+app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(minutes=15)
+app.config['JWT_REFRESH_TOKEN_EXPIRES'] = timedelta(days=30)
 
-# Habilitar CORS para permitir solicitudes desde el frontend
+# Habilitar CORS
 CORS(app, supports_credentials=True)
 
-# Inicializar Flask-Session
-Session(app)
+# Inicializar JWTManager
+jwt = JWTManager(app)
 
-# Simular un archivo JSON para almacenar usuarios
-USERS_FILE = 'users.json'
+# Configurar Firebase
+firebase_credentials_path=os.getenv("FIREBASE_CREDENTIALS_PATH")
+cred = credentials.Certificate(firebase_credentials_path)
+firebase_admin.initialize_app(cred)
+db = firestore.client()
 
-# Funciones para manejar usuarios (cargar y guardar)
-def load_users():
-    try:
-        with open(USERS_FILE, 'r') as f:
-            return json.load(f)
-    except FileNotFoundError:
-        return {}
-
-def save_users(users):
-    with open(USERS_FILE, 'w') as f:
-        json.dump(users, f)
-
-# Ruta para registrar un nuevo usuario (Sign Up)
-@app.route('/signup', methods=['POST'])
-def signup():
+# Ruta para registrar un nuevo usuario
+@app.route('/register', methods=['POST'])
+def register():
     data = request.json
     username = data.get('username')
     password = data.get('password')
@@ -45,15 +39,18 @@ def signup():
     if not username or not password:
         return jsonify({'message': 'Username and password are required'}), 400
 
-    users = load_users()
-
-    if username in users:
+    # Verificar si el usuario ya existe en Firebase
+    user_ref = db.collection('users')
+    query = user_ref.where('username', '==', username).get()
+    if query:
         return jsonify({'message': 'Username already exists'}), 409
 
-    # Registrar al nuevo usuario
-    users[username] = password
-    save_users(users)
-
+    # Registrar al nuevo usuario en Firebase
+    new_user_ref = user_ref.document()
+    new_user_ref.set({
+        'username': username,
+        'password': password
+        })
     return jsonify({'message': 'User registered successfully'}), 201
 
 # Ruta para iniciar sesión
@@ -63,28 +60,37 @@ def login():
     username = data.get('username')
     password = data.get('password')
 
-    users = load_users()
-
-    # Verificar credenciales
-    if username in users and users[username] == password:
-        session['user'] = username  # Almacenar el usuario en la sesión
-        return jsonify({'message': 'Login successful!'}), 200
+    # Consultar usuario en Firebase
+    users_ref = db.collection('users')
+    query = users_ref.where('username', '==', username).get()
+    
+    if query and query[0].to_dict()['password'] == password:
+        # Crear tokens de acceso y refresh
+        access_token = create_access_token(identity=username)
+        refresh_token = create_refresh_token(identity=username)
+        return jsonify(access_token=access_token, refresh_token=refresh_token), 200
     else:
         return jsonify({'message': 'Invalid credentials'}), 401
 
-# Ruta para cerrar sesión
-@app.route('/logout', methods=['POST'])
-def logout():
-    session.pop('user', None)  # Eliminar la sesión del usuario
-    return jsonify({'message': 'Logged out successfully!'}), 200
+# Ruta para la renovación del token
+@app.route('/refresh', methods=['POST'])
+@jwt_required(refresh=True)
+def refresh():
+    identity = get_jwt_identity()
+    access_token = create_access_token(identity=identity)
+    return jsonify(access_token=access_token), 200
 
 # Ruta protegida
 @app.route('/protected', methods=['GET'])
+@jwt_required()
 def protected():
-    if 'user' in session:
-        return jsonify({'message': f'Welcome, {session["user"]}!'}), 200
-    else:
-        return jsonify({'message': 'Unauthorized'}), 401
+    current_user = get_jwt_identity()
+    return jsonify({'message': f'Welcome, {current_user}!'}), 200
+
+# Manejo de tokens caducados
+@jwt.expired_token_loader
+def expired_token_callback(jwt_header, jwt_payload):
+    return jsonify({'message': 'The token has expired'}), 401
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
