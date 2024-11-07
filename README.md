@@ -48,21 +48,21 @@ Activo y en desarrollo.
 
 ### Roadmap:
 
-#### - [ ] Frontend:
+- [ ] <b>Frontend:<b/>
   - [x] Pantalla Login y Register.
   - [x] Pantalla Inicio.
   - [x] Lista de registro de Autos.
   - [ ] Implementar visualización de tabla de entradas y salidas.
   - [ ] Visualización gráfica estadística de entradas y salidas.
         
-#### - [ ] #### Backend:
+- [ ] Backend:
   - [x] Endpoints para envío de datos de registro y su consulta.
   - [x] Sesiones con Flask y Flask-Session.
   - [x] Seguridad y Autenticación con JWT.
   - [ ] Limitación de tráfico del sitio.
   - [ ] Enpoint para carga y gestión de archivos.
         
-#### - [ ] #### Computer Vision:
+- [ ] #### Computer Vision:
   - [x] Lectura de caracteres mediante cámara.
   - [x] Delimitación de lectura de caracteres.
   - [ ] Implementar el código en el módulo de desarrollo Jetson Nano.
