@@ -44,10 +44,13 @@ Activo y en desarrollo.
 
 #### Roadmap:
 
-- 
-- []Implementar el código en el módulo de desarrollo Jetson Nano.
-- []Implementar control de tráfico para dashboard.
-- []Implementar visualización gráfica de registro de entradas y salidas.
+- [ ]Frontend:
+  - [ ]  
+- [ ]Sesiones con Flask y Flask-Session
+- [ ]Seguridad y Autenticación con JWT
+- [ ]Implementar el código en el módulo de desarrollo Jetson Nano.
+- [ ]Implementar control de tráfico para dashboard.
+- [ ]Implementar visualización gráfica de registro de entradas y salidas.
 
 ## Pantallas del Dashboard
 
