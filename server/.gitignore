@@ -24,3 +24,6 @@ dist-ssr
 *.sw?
 
 .env
+
+# Ignorar la carpeta del entorno virtual
+venv/

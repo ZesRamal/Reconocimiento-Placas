@@ -1,5 +1,7 @@
 from flask import Flask, jsonify, request
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity, create_refresh_token
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from flask_cors import CORS
 from dotenv import load_dotenv
 import firebase_admin
@@ -29,8 +31,17 @@ cred = credentials.Certificate(firebase_credentials_path)
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 
+# Configurar Flask-Limiter para límites de tasa
+limiter = Limiter(
+    key_func=get_remote_address,  # Usa la dirección IP para limitar las peticiones
+    app=app,
+    default_limits=["10 per hour"]  # Límite global: 10 peticiones por hora
+)
+
+
 # Ruta para registrar un nuevo usuario
 @app.route('/register', methods=['POST'])
+@limiter.limit("5 per hour")  # Límite específico para el registro de 5 peticiones por hora
 def register():
     data = request.json
     username = data.get('username')
@@ -50,11 +61,12 @@ def register():
     new_user_ref.set({
         'username': username,
         'password': password
-        })
+    })
     return jsonify({'message': 'User registered successfully'}), 201
 
 # Ruta para iniciar sesión
 @app.route('/login', methods=['POST'])
+@limiter.limit("10 per minute")
 def login():
     data = request.json
     username = data.get('username')
@@ -75,6 +87,7 @@ def login():
 # Ruta para la renovación del token
 @app.route('/refresh', methods=['POST'])
 @jwt_required(refresh=True)
+@limiter.limit("5 per hour") 
 def refresh():
     identity = get_jwt_identity()
     access_token = create_access_token(identity=identity)
@@ -83,6 +96,7 @@ def refresh():
 # Ruta protegida
 @app.route('/protected', methods=['GET'])
 @jwt_required()
+@limiter.limit("10 per hour")
 def protected():
     current_user = get_jwt_identity()
     return jsonify({'message': f'Welcome, {current_user}!'}), 200
@@ -91,6 +105,13 @@ def protected():
 @jwt.expired_token_loader
 def expired_token_callback(jwt_header, jwt_payload):
     return jsonify({'message': 'The token has expired'}), 401
+
+# Manejo de usuarios bloqueados temporalmente
+@app.errorhandler(429)
+def ratelimit_handler(e):
+    return jsonify({
+        'message': 'Too many requests, please try again later.'
+    }), 429
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
