@@ -44,15 +44,16 @@ Activo y en desarrollo.
 
 #### Roadmap:
 
-- Implementar el código en el módulo de desarrollo Jetson Nano.
-- Implementar control de tráfico para dashboard.
-- Implementar visualización gráfica de registro de entradas y salidas.
+- 
+- []Implementar el código en el módulo de desarrollo Jetson Nano.
+- []Implementar control de tráfico para dashboard.
+- []Implementar visualización gráfica de registro de entradas y salidas.
 
-## Pantallas de la Aplicación
+## Pantallas del Dashboard
 
-- _TBA._ N/A.
+- _TBD._ N/A.
 
-<img src="READMEAppScreenshots/TBA.jpg" width="300" height="700" alt="TBA.">
+<img src="READMEAppScreenshots/TBD.jpg" width="300" height="700" alt="TBD.">
 
 ## Créditos
 
