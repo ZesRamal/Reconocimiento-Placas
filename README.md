@@ -19,6 +19,7 @@ Hardware:
 ## ¿Cómo Instalar y Correr el Proyecto?
 
 Necesitas tener instalado Node en su versión 18+ o 20+ en el siguiente enlace se tiene la documentación oficial al respecto: [React ⚛️](https://nodejs.org/en/learn/getting-started/how-to-install-nodejs#how-to-install-nodejs)
+
 Además de Python en su versión 3.12 (no se ha probado con otras). Te proporcionamos los enlaces de guía de instalación para cada plataforma:
 
 - [Unix 🐧](https://docs.python.org/3/using/unix.html)
