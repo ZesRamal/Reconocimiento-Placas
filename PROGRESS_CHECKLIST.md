@@ -1,26 +1,26 @@
 # Checklist Progreso
-- [ ] Frontend:
+- [ ] **Frontend:**
   - [x] Pantalla Login y Register.
   - [x] Pantalla Inicio.
   - [x] Lista de registro de Autos.
   - [ ] Implementar visualización de tabla de entradas y salidas.
   - [ ] Visualización gráfica estadística de entradas y salidas.
         
-- [ ] Backend:
+- [ ] **Backend:**
   - [x] Endpoints para envío de datos de registro y su consulta.
   - [x] Sesiones con Flask y Flask-Session.
   - [x] Seguridad y Autenticación con JWT.
   - [ ] Limitación de tráfico del sitio.
   - [ ] Enpoint para carga y gestión de archivos.
         
-- [ ] Computer Vision:
+- [ ] **Computer Vision:**
   - [x] Lectura de caracteres mediante cámara.
   - [x] Delimitación de lectura de caracteres.
   - [ ] Implementar el código en el módulo de desarrollo Jetson Nano.
   - [ ] Aumento de fidelidad de lectura.
 
-- [ ] Documentación:
-  - [ ] Frontend:
+- [ ] **Documentación:**
+  - [ ] **Frontend:**
     - [ ] Arquitectura.
     - [ ] Tecnologías Utilizadas.
     - [ ] Componentes UI.
@@ -33,7 +33,7 @@
     - [ ] Configuración de Entorno de Desarrollo.
     - [ ] Variables de Entorno.
     - [ ] Ejemplos y Casos de Prueba
-  - [ ] Backend:
+  - [ ] **Backend:**
     - [ ] Arquitectura.
     - [ ] Tecnologías Utilizadas.
     - [ ] Estructura de Archivos.
@@ -46,7 +46,7 @@
     - [ ] Dependencias.
     - [ ] Configuración de Entorno de Desarrollo.
     - [ ] Ejemplos y Casos de Prueba
-  - [ ] Database:
+  - [ ] **Database:**
     - [ ] Diagrama de Base de Datos.
     - [ ] Descripción de Tablas.
     - [ ] Triggers.
@@ -54,7 +54,7 @@
     - [ ] Respaldos.
     - [ ] Control de Acceso, Roles, Permisos.
     - [ ] Herramientas de Gestión y Monitoreo.
-  - [ ] Hardware:
+  - [ ] **Hardware:**
     - [ ] Lista de Componentes Electrónicos.
     - [ ] Especificaciones Técnicas de Componentes.
     - [ ] Esquemas de Circuitos y Diagramas.
@@ -63,6 +63,6 @@
     - [ ] Pruebas y Validación.
     - [ ] Procedimientos de Mantenimiento y Solución de Problemas.
     - [ ] Consideraciones de Seguridad.
-  - [ ] Manual de usuario:
+  - [ ] **Manual de usuario:**
     - [ ] Introducción.
     - [ ] Requisitos del Sistema.
