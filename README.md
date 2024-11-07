@@ -32,6 +32,10 @@ Para clonar el proyecto abre una terminal en la ubicación deseada y escribe el 
 git clone https://github.com/ZesRamal/Reconocimiento-Placas.git
 ```
 
+```bash
+--- Añadir más información ---
+```
+
 ## ¿Cómo usar el proyecto?
 
 Con el servidor express y el dashboard ejecutandose, iniciamos el programa de reconocimiento de placas. Se abrirá una ventana mostrando lo que se esta visualizando por la cámara. Al detectar un rectángulo con que cumpla con el requerimiento de lo que se considera una placa de un automóvil se tomará una cáptura, se procesarán los valores de la placa, se enviarán al servidor de donde se tomarán estos datos y se desplegarán en el dashboard.
@@ -44,13 +48,21 @@ Activo y en desarrollo.
 
 #### Roadmap:
 
-- [ ]Frontend:
-  - [ ]  
-- [ ]Sesiones con Flask y Flask-Session
-- [ ]Seguridad y Autenticación con JWT
-- [ ]Implementar el código en el módulo de desarrollo Jetson Nano.
-- [ ]Implementar control de tráfico para dashboard.
-- [ ]Implementar visualización gráfica de registro de entradas y salidas.
+- [ ] Frontend:
+  - [x] Pantalla Login y Register.
+  - [x] Pantalla Inicio.
+  - [x] Lista de registro de Autos.
+  - [ ] Implementar visualización de tabla de entradas y salidas.
+  - [ ] Visualización gráfica estadística de entradas y salidas.
+- [ ] Backend:
+  - [x] Endpoints para envío de datos de registro y su consulta.
+  - [x] Sesiones con Flask y Flask-Session.
+  - [x] Seguridad y Autenticación con JWT.
+- [ ] Computer Vision:
+  - [x] Lectura de caracteres mediante cámara.
+  - [x] Delimitación de lectura de caracteres.
+  - [ ] Implementar el código en el módulo de desarrollo Jetson Nano.
+  - [ ] Aumento de fidelidad de lectura.
 
 ## Pantallas del Dashboard
 
