@@ -1,10 +1,10 @@
-# Sistema de Control de Entrada y Salida de Autos por Número de Placa
+# Sistema de Control de Entrada y Salida de Autos
 
 Este sistema utiliza tecnología de reconocimiento óptico de caracteres (OCR) para identificar automáticamente las matrículas de los vehículos. Al instalar cámaras en los puntos de acceso, el sistema captura imágenes de las placas, obtiene los caracteres y los envía a una base de datos de donde se consultará la información desplegada en el dashboard web.
 
 En este README encontrarás información general respecto al proyecto y cómo utilizarlo. Si gustas leer información más detallada al respecto puede dirigirte a nuestro google doc: [Documentación 📄](https://docs.google.com/document/d/1g2XP08FGQq8FJmYp_3psSb1SsMw6X24vORQCKUahHkM/edit?usp=sharing)
 
-¿Qué tecnología usa?
+##¿Qué tecnología usa?
 
 Software:
 
@@ -42,23 +42,27 @@ Con el servidor express y el dashboard ejecutandose, iniciamos el programa de re
 
 ## Estado y Roadmap
 
-#### Estado:
+### Estado:
 
 Activo y en desarrollo.
 
-#### Roadmap:
+### Roadmap:
 
-- [ ] Frontend:
+- [ ] #### Frontend:
   - [x] Pantalla Login y Register.
   - [x] Pantalla Inicio.
   - [x] Lista de registro de Autos.
   - [ ] Implementar visualización de tabla de entradas y salidas.
   - [ ] Visualización gráfica estadística de entradas y salidas.
-- [ ] Backend:
+        
+- [ ] #### Backend:
   - [x] Endpoints para envío de datos de registro y su consulta.
   - [x] Sesiones con Flask y Flask-Session.
   - [x] Seguridad y Autenticación con JWT.
-- [ ] Computer Vision:
+  - [ ] Limitación de tráfico del sitio.
+  - [ ] Enpoint para carga y gestión de archivos.
+        
+- [ ] #### Computer Vision:
   - [x] Lectura de caracteres mediante cámara.
   - [x] Delimitación de lectura de caracteres.
   - [ ] Implementar el código en el módulo de desarrollo Jetson Nano.
