@@ -48,7 +48,7 @@ Activo y en desarrollo.
 
 ### Roadmap:
 
-- [ ] <b>Frontend:<b/>
+- [ ] <b>Frontend:<b>
   - [x] Pantalla Login y Register.
   - [x] Pantalla Inicio.
   - [x] Lista de registro de Autos.
