@@ -1,0 +1,68 @@
+# Checklist Progreso
+- [ ] Frontend:
+  - [x] Pantalla Login y Register.
+  - [x] Pantalla Inicio.
+  - [x] Lista de registro de Autos.
+  - [ ] Implementar visualización de tabla de entradas y salidas.
+  - [ ] Visualización gráfica estadística de entradas y salidas.
+        
+- [ ] Backend:
+  - [x] Endpoints para envío de datos de registro y su consulta.
+  - [x] Sesiones con Flask y Flask-Session.
+  - [x] Seguridad y Autenticación con JWT.
+  - [ ] Limitación de tráfico del sitio.
+  - [ ] Enpoint para carga y gestión de archivos.
+        
+- [ ] Computer Vision:
+  - [x] Lectura de caracteres mediante cámara.
+  - [x] Delimitación de lectura de caracteres.
+  - [ ] Implementar el código en el módulo de desarrollo Jetson Nano.
+  - [ ] Aumento de fidelidad de lectura.
+
+- [ ] Documentación:
+  - [ ] Frontend:
+    - [ ] Arquitectura.
+    - [ ] Tecnologías Utilizadas.
+    - [ ] Componentes UI.
+    - [ ] Lineamientos de Estilo.
+    - [ ] Bibliotecas.
+    - [ ] Flujo de Navegación.
+    - [ ] Gestión de Estados.
+    - [ ] Manejo de Datos.
+    - [ ] Control de Permisos.
+    - [ ] Configuración de Entorno de Desarrollo.
+    - [ ] Variables de Entorno.
+    - [ ] Ejemplos y Casos de Prueba
+  - [ ] Backend:
+    - [ ] Arquitectura.
+    - [ ] Tecnologías Utilizadas.
+    - [ ] Estructura de Archivos.
+    - [ ] Enpoints de API.
+    - [ ] Autenticación.
+    - [ ] Manejo de Errores.
+    - [ ] Ejemplos de Códigos de respuesta estándar.
+    - [ ] Descripción de Flujos de Sesiones.
+    - [ ] Cifrado de datos sensibles.
+    - [ ] Dependencias.
+    - [ ] Configuración de Entorno de Desarrollo.
+    - [ ] Ejemplos y Casos de Prueba
+  - [ ] Database:
+    - [ ] Diagrama de Base de Datos.
+    - [ ] Descripción de Tablas.
+    - [ ] Triggers.
+    - [ ] Consultas.
+    - [ ] Respaldos.
+    - [ ] Control de Acceso, Roles, Permisos.
+    - [ ] Herramientas de Gestión y Monitoreo.
+  - [ ] Hardware:
+    - [ ] Lista de Componentes Electrónicos.
+    - [ ] Especificaciones Técnicas de Componentes.
+    - [ ] Esquemas de Circuitos y Diagramas.
+    - [ ] Instrucciones de Ensamblaje y Montaje.
+    - [ ] Especificaciones de Alimentación y Consumo.
+    - [ ] Pruebas y Validación.
+    - [ ] Procedimientos de Mantenimiento y Solución de Problemas.
+    - [ ] Consideraciones de Seguridad.
+  - [ ] Manual de usuario:
+    - [ ] Introducción.
+    - [ ] Requisitos del Sistema.
