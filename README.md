@@ -92,9 +92,9 @@ Activo y en desarrollo.
 
 ## Pantallas del Dashboard
 
-- _TBD._ N/A.
+- _Pantalla de Inicio de Sesión_ Solamente se tiene centrado el componente LoginForm.
 
-<img src="READMEAppScreenshots/TBD.jpg" width="300" height="700" alt="TBD.">
+<img src="README-Images/Pantalla-Inicio.png" width="300" height="700" alt="Pantalla de Inicio de Sesión.">
 
 ## Créditos
 
