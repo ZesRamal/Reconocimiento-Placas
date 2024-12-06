@@ -93,6 +93,13 @@ def refresh():
     access_token = create_access_token(identity=identity)
     return jsonify(access_token=access_token), 200
 
+@app.route('/logout', methods=['POST'])
+@jwt_required(refresh=True)
+def logout():
+    # Aquí puedes implementar una lista negra para invalidar el refresh token
+    return jsonify({'message': 'Logged out successfully'}), 200
+
+
 # Ruta protegida
 @app.route('/protected', methods=['GET'])
 @jwt_required()
@@ -115,3 +122,4 @@ def ratelimit_handler(e):
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
+

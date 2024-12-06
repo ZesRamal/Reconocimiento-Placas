@@ -1,28 +1,26 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Home, Register, Registry, Login, List, CreateAccount } from "./pages";
 import { Navbar } from './layout';
+import ProtectedRoute from "./utils/protectedRoutes";
+import PublicRoute from "./utils/publicRoutes";
 import { useAuth } from './utils/authProvider';
 
 function App() {
   const { isAuthenticated } = useAuth();
 
   return (
-    <div style={{ display: "flex" }}>
-      {
-        isAuthenticated ? <Navbar /> : <></>
-      }
-      <Routes>
-        <Route>
-          <Route path="/" element={isAuthenticated ? <Home /> : <Navigate to="/login" replace />} />
-          <Route path="/registrar" element={isAuthenticated ? <Register /> : <Navigate to="/login" replace />} />
-          <Route path="/listado" element={isAuthenticated ? <List /> : <Navigate to="/login" replace />} />
-          <Route path="/registro" element={isAuthenticated ? <Registry /> : <Navigate to="/login" replace />} />
-        </Route>
-        <Route path="/register" element={!isAuthenticated ? <CreateAccount /> : <Navigate to="/" replace />} />
-        <Route path="/login" element={!isAuthenticated ? <Login /> : <Navigate to="/" replace />} />
-      </Routes>
-    </div>
-  )
+      <div style={{ display: "flex" }}>
+          {isAuthenticated && <Navbar />}
+          <Routes>
+              <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+              <Route path="/registrar" element={<ProtectedRoute><Register /></ProtectedRoute>} />
+              <Route path="/listado" element={<ProtectedRoute><List /></ProtectedRoute>} />
+              <Route path="/registro" element={<ProtectedRoute><Registry /></ProtectedRoute>} />
+              <Route path="/register" element={<PublicRoute><CreateAccount /></PublicRoute>} />
+              <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
+          </Routes>
+      </div>
+  );
 }
 
 export default App

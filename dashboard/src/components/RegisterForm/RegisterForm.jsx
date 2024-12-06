@@ -1,11 +1,11 @@
-import "./loginForm.css";
+import "./registerForm.css";
 import { useNavigate, Link } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 
 // Configuración de Axios para establecer un baseURL
 const apiClient = axios.create({
-    baseURL: 'http://localhost:3000', // Cambia esto a tu URL base
+    baseURL: 'http://localhost:5000', // Cambia esto a tu URL base
 });
 
 const RegisterForm = () => {
@@ -31,6 +31,7 @@ const RegisterForm = () => {
                 await apiClient.post("/register", { // Usa el cliente Axios configurado
                     username: registerData.username,
                     password: registerData.password,
+                    confirmPassword: registerData.confirmPassword
                 });
                 document.getElementById("register").reset();
                 setRegisterData({

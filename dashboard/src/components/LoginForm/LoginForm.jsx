@@ -1,50 +1,39 @@
 import "./loginForm.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useAuth } from "../../utils/authProvider";
 import axios from "axios";
 
-// Configuración de Axios para establecer un baseURL
+// Configuración de Axios
 const apiClient = axios.create({
-    baseURL: 'http://localhost:3000', // Cambia esto a tu URL base
+    baseURL: 'http://localhost:5000', // Cambia a la URL de tu backend Flask
 });
 
 const LoginForm = () => {
-    const [loginData, setLoginData] = useState({
-        username: '',
-        password: '',
-    });
+    const [loginData, setLoginData] = useState({ username: '', password: '' });
     const [error, setError] = useState('');
+    const { login } = useAuth();
     const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        setError("");
         if (loginData.username && loginData.password) {
-            await checkLogin();
-            document.getElementById("login").reset();
-            setLoginData({
-                username: '',
-                password: '',
-            });
+            try {
+                const response = await axios.post("http://localhost:5000/login", {
+                    username: loginData.username,
+                    password: loginData.password,
+                });
+                const { access_token, refresh_token } = response.data;
+                login(access_token, refresh_token);
+                navigate("/", { replace: true });
+            } catch (error) {
+                setError(error.response?.data?.message || "Error al iniciar sesión.");
+            }
         } else {
             setError("Por favor llena ambos campos");
         }
     };
-
-    async function checkLogin() {
-        try {
-            const response = await apiClient.post("/login", { // Usa el cliente Axios configurado
-                username: loginData.username,
-                password: loginData.password,
-            });
-            const data = response.data;
-            localStorage.setItem('token', data.token);
-            navigate("/", { replace: true });
-            window.location.reload();
-        } catch (error) {
-            console.error('Error de inicio de sesión:', error.response?.data?.error || 'Error desconocido');
-            setError(error.response?.data?.error || 'Error al iniciar sesión. Verifica tu usuario y contraseña.');
-        }
-    }
 
     return (
         <div style={{ width: "100%" }}>
