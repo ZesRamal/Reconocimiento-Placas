@@ -94,11 +94,11 @@ Activo y en desarrollo.
 
 - _Pantalla de Inicio de Sesión_ Solamente se tiene centrado el componente LoginForm.
 
-<img src="README-Images/Pantalla-Inicio.png" width="800" height="700" alt="Pantalla de Inicio de Sesión.">
+<img src="README-Images/Pantalla-Inicio.png" width="1100" height="700" alt="Pantalla de Inicio de Sesión.">
 
 - _Pantalla de Inicio de Sesión En Móvil_ Solamente se tiene centrado el componente LoginForm.
 
-<img src="README-Images/Movil-Inicio.png" width="300" height="700" alt="Pantalla de Inicio de Sesión.">
+<img src="README-Images/Movil-Inicio.png" width="300" height="700" alt="Pantalla de Inicio de Sesión Móvil.">
 
 ## Créditos
 
