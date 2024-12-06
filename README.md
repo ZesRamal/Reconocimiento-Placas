@@ -32,8 +32,30 @@ Para clonar el proyecto abre una terminal en la ubicación deseada y escribe el 
 git clone https://github.com/ZesRamal/Reconocimiento-Placas.git
 ```
 
+Descarga los modulos Node necesarios para el servidor y el dashboard:
+
 ```bash
---- Añadir más información ---
+ubicacion-proyecto> cd dashboard
+ubicacion-proyecto\dashboard> npm i
+```
+
+```bash
+ubicacion-proyecto> cd server
+ubicacion-proyecto\server> npm i
+```
+
+Inicializa el servidor con:
+
+```bash
+ubicacion-proyecto> cd server
+ubicacion-proyecto\server> npm start
+```
+
+Inicializa el dashboard con:
+
+```bash
+ubicacion-proyecto> cd dashboard
+ubicacion-proyecto\dashboard> npm run dev
 ```
 
 ## ¿Cómo usar el proyecto?
