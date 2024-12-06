@@ -7,7 +7,7 @@ from collections import Counter
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
 # Ruta del video
-video_path = r'C:\Users\oscar\OneDrive\Documents\9no\front\Reconocimiento-Placas\pruebas\1.mp4'
+# ruta de donde se encuentra el video de muestra video_path = r''
 cap = cv2.VideoCapture(video_path)
 
 # Obtener el frame rate del video
