@@ -9,7 +9,7 @@ En este README encontrarás información general respecto al proyecto y cómo ut
 Software:
 
 - react: 18.3.1
-- python: 3.12
+- python: 3.
 - node: 20.11.1
 
 Hardware:
@@ -20,7 +20,7 @@ Hardware:
 
 Necesitas tener instalado Node en su versión 18+ o 20+ en el siguiente enlace se tiene la documentación oficial al respecto: [React ⚛️](https://nodejs.org/en/learn/getting-started/how-to-install-nodejs#how-to-install-nodejs)
 
-Además de Python en su versión 3.12 (no se ha probado con otras). Te proporcionamos los enlaces de guía de instalación para cada plataforma:
+Además de Python en su versión 3.8 (no se ha probado con otras). Te proporcionamos los enlaces de guía de instalación para cada plataforma:
 
 - [Unix 🐧](https://docs.python.org/3/using/unix.html)
 - [Windows 🪟](https://docs.python.org/3/using/windows.html)
@@ -102,7 +102,7 @@ Activo y en desarrollo.
 
 ## Créditos
 
-- Computer Vision Dev: [Oscar Anguiano Gonzalez](https://github.com/Oscar060502)
+- Computer Vision / Hardware Dev: [Oscar Anguiano Gonzalez](https://github.com/Oscar060502)
 - Frontend Dev: [Cesar Francisco Ramos Leal](https://github.com/ZesRamal)
 - Backend Dev: [Jared Zaragoza Rosales](https://github.com/K0i0s)
 
