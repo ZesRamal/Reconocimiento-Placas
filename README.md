@@ -2,6 +2,8 @@
 
 Este sistema utiliza tecnología de reconocimiento óptico de caracteres (OCR) para identificar automáticamente las matrículas de los vehículos. Al instalar cámaras en los puntos de acceso, el sistema captura imágenes de las placas, obtiene los caracteres y los envía a una base de datos de donde se consultará la información desplegada en el dashboard web.
 
+NOTA: El avance de este proyecto es solo para pruebas de videos pregrabados, no en directo. 
+
 En este README encontrarás información general respecto al proyecto y cómo utilizarlo. Si gustas leer información más detallada al respecto puede dirigirte a nuestro google doc: [Documentación 📄](https://docs.google.com/document/d/1g2XP08FGQq8FJmYp_3psSb1SsMw6X24vORQCKUahHkM/edit?usp=sharing)
 
 ## ¿Qué tecnología usa?
@@ -89,6 +91,7 @@ Activo y en desarrollo.
   - [x] Delimitación de lectura de caracteres.
   - [ ] Implementar el código en el módulo de desarrollo Jetson Nano.
   - [ ] Aumento de fidelidad de lectura.
+  - [ ] Análisis y registro de placas en video en vivo.
 
 ## Ejemplos de Pantallas del Dashboard
 
