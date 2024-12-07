@@ -4,7 +4,7 @@ Este sistema utiliza tecnología de reconocimiento óptico de caracteres (OCR) p
 
 NOTA: El avance de este proyecto es solo para pruebas de videos pregrabados, no en directo. 
 
-En este README encontrarás información general respecto al proyecto y cómo utilizarlo. Si gustas leer información más detallada al respecto puede dirigirte a nuestro google doc: [Documentación 📄](https://docs.google.com/document/d/1g2XP08FGQq8FJmYp_3psSb1SsMw6X24vORQCKUahHkM/edit?usp=sharing)
+En este README encontrarás información general respecto al proyecto y cómo utilizarlo. Si gustas leer información más detallada al respecto puede dirigirte a nuestro [Google Doc 📄](https://docs.google.com/document/d/1g2XP08FGQq8FJmYp_3psSb1SsMw6X24vORQCKUahHkM/edit?usp=sharing)
 
 ## ¿Qué tecnología usa?
 
