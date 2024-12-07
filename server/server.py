@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_from_directory
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity, create_refresh_token
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
@@ -13,6 +13,8 @@ from datetime import timedelta
 load_dotenv()
 
 app = Flask(__name__)
+
+app.config['UPLOAD_FOLDER'] = 'placas_detectadas' 
 
 # Configurar JWT
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
@@ -37,7 +39,6 @@ limiter = Limiter(
     app=app,
     default_limits=["10 per hour"]  # Límite global: 10 peticiones por hora
 )
-
 
 # Ruta para registrar un nuevo usuario
 @app.route('/register', methods=['POST'])
@@ -113,6 +114,38 @@ def protected():
 def expired_token_callback(jwt_header, jwt_payload):
     return jsonify({'message': 'The token has expired'}), 401
 
+# Logica relacionada con la obtencion de los datos de las placas
+@app.route('/placas', methods=['GET'])
+@limiter.limit("10 per second")
+def get_placas():
+    # Obtener todas las placas de la colección "placas"
+    placas_ref = db.collection('placas')
+    placas = placas_ref.stream()
+
+    placas_list = []
+    for placa in placas:
+        placa_data = placa.to_dict()
+        # Asegúrate de que la URL de la imagen sea accesible públicamente
+        imagen_url = f"http://localhost:5000/{placa_data['imagen']}"
+        placas_list.append({
+            'id_imagen': placa_data['id_imagen'],
+            'placa': placa_data['placa'],
+            'fecha_hora_deteccion': placa_data['fecha_hora_deteccion'],
+            'imagen': imagen_url  # URL pública de la imagen
+        })
+
+    return jsonify(placas_list), 200
+
+@app.route('/placas_detectadas/<filename>', methods=['GET'])
+@limiter.limit("100 per second")
+def serve_image(filename):
+    # Construye la ruta correctamente desde el directorio base
+    base_path = os.path.dirname(os.path.abspath(__file__))  # Obtiene el directorio de este archivo
+    image_folder = os.path.join(base_path, '..', 'placas_detectadas')
+    image_folder = os.path.abspath(image_folder)  # Convierte la ruta en absoluta
+    print(f"Looking for file: {filename} in {image_folder}")
+    return send_from_directory(image_folder, filename)
+
 # Manejo de usuarios bloqueados temporalmente
 @app.errorhandler(429)
 def ratelimit_handler(e):
@@ -122,4 +155,3 @@ def ratelimit_handler(e):
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
-

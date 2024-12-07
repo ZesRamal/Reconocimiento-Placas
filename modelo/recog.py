@@ -1,14 +1,31 @@
 import cv2
-import numpy as np
+import os
 import pytesseract
-from collections import Counter
+from datetime import datetime
+import firebase_admin
+from firebase_admin import credentials, firestore
+from dotenv import load_dotenv
 
-# Configuración de Tesseract
-pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+# Cargar variables de entorno desde .env
+load_dotenv()
+
+# Configuración de Tesseract en Linux
+pytesseract.pytesseract.tesseract_cmd = '/usr/bin/tesseract'  # Ruta predeterminada en Linux
+
+# Configurar Firebase Admin SDK
+cred_path = os.getenv("FIREBASE_CREDENTIALS_PATH")
+
+cred = credentials.Certificate(cred_path)  # Ruta cargada desde el .env
+firebase_admin.initialize_app(cred)
+db = firestore.client()
 
 # Ruta del video
-# ruta de donde se encuentra el video de muestra video_path = r''
+video_path = '/home/nosey/Descargas/1.mp4'
 cap = cv2.VideoCapture(video_path)
+
+if not cap.isOpened():
+    print("Error: No se pudo abrir el archivo de video. Verifica la ruta.")
+    exit()
 
 # Obtener el frame rate del video
 fps = cap.get(cv2.CAP_PROP_FPS)
@@ -24,7 +41,6 @@ placas_detectadas = []
 
 # Función para contar cuántos caracteres coinciden entre dos placas
 def contar_caracteres_comunes(placa1, placa2):
-    # Usamos un contador para contar las coincidencias entre los caracteres de las placas
     comunes = sum(1 for c1, c2 in zip(placa1, placa2) if c1 == c2)
     return comunes
 
@@ -53,10 +69,10 @@ while cap.isOpened():
         approx = cv2.approxPolyDP(c, epsilon, True)
 
         # Filtrar contornos
-        if len(approx) == 4 and area > 3000:  # Mayor área mínima
+        if len(approx) == 4 and area > 3000:
             aspect_ratio = float(w) / h
             if 2.0 < aspect_ratio < 5.0:
-                placa = frame[y:y + h, x:x + w]  # Extraer la placa del frame original
+                placa = frame[y:y + h, x:x + w]
 
                 # Mejorar calidad para OCR
                 placa_gray = cv2.cvtColor(placa, cv2.COLOR_BGR2GRAY)
@@ -67,31 +83,38 @@ while cap.isOpened():
                 text = pytesseract.image_to_string(placa_bin, config='--psm 8 -c tessedit_char_whitelist=ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
                 text = text.strip()
 
-                # Validar texto
-                if len(text) >= 6:  # Longitud típica de una placa
-                    # Comparar con las placas ya detectadas
+                if len(text) >= 6:
                     repetida = False
                     for placa_anterior in placas_detectadas:
                         if contar_caracteres_comunes(text, placa_anterior) >= 6:
                             repetida = True
                             break
 
-                    if not repetida:  # Si no es repetida, la procesamos
+                    if not repetida:
                         print('PLACA: ', text)
-                        placas_detectadas.append(text)  # Agregar a las placas detectadas
+                        placas_detectadas.append(text)
 
-                        # Mostrar rectángulo y texto en el frame original
-                        cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 3)
-                        cv2.putText(frame, text, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
+                        # Guardar imagen localmente
+                        img_name = f"placa_{text}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.jpg"
+                        img_path = os.path.join("placas_detectadas", img_name)
+                        os.makedirs("placas_detectadas", exist_ok=True)
+                        cv2.imwrite(img_path, placa)
+
+                        # Guardar información en Firestore (solo ruta local de la imagen)
+                        doc_ref = db.collection('placas').document()
+                        doc_ref.set({
+                            "id_imagen": doc_ref.id,
+                            "placa": text,
+                            "fecha_hora_deteccion": datetime.now().isoformat(),
+                            "imagen": img_path  # Guardar la ruta local
+                        })
 
                         # Mostrar solo la imagen de la placa en una ventana separada
-                        cv2.imshow('PLACA', placa)  # Mostrar solo la placa detectada
+                        cv2.imshow('PLACA', placa)
 
-    # Mostrar el frame procesado (completo) en la ventana 'Image'
     cv2.imshow('Image', frame)
     cv2.resizeWindow('Image', 800, 600)
 
-    # Salir al presionar 'q'
     if cv2.waitKey(wait_time) & 0xFF == ord('q'):
         break
 

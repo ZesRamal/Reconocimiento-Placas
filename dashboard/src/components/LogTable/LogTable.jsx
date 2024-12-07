@@ -6,7 +6,7 @@ const LogTable = () => {
 
     const fetchPlates = async () => {
         try {
-            const response = await fetch('http://localhost:3000/api/plates');  // Cambia a la URL completa
+            const response = await fetch('http://localhost:5000/placas');  // Cambia a la URL correcta para obtener placas
             const data = await response.json();  // Convertimos a JSON los datos recibidos
             setPlates(data);  // Guardamos los datos en el estado
         } catch (error) {
@@ -29,20 +29,20 @@ const LogTable = () => {
             <table className="table">
                 <thead>
                     <tr>
-                        <th scope="col">ID</th>
+                        <th scope="col">ID Imagen</th>
                         <th scope="col">Número de Placa</th>
-                        <th scope="col">Fecha/Hora</th>
-                        <th scope="col">Fotograma</th>
+                        <th scope="col">Fecha/Hora de Detección</th>
+                        <th scope="col">Imagen</th>
                     </tr>
                 </thead>
                 <tbody>
                     {plates.map((plate) => (
-                        <tr key={plate.id}>
-                            <th scope="row">{plate.id}</th>
-                            <td>{plate.plate}</td>
-                            <td>{new Date(plate.timestamp).toLocaleString()}</td>
+                        <tr key={plate.id_imagen}>
+                            <th scope="row">{plate.id_imagen}</th>
+                            <td>{plate.placa}</td>
+                            <td>{new Date(plate.fecha_hora_deteccion).toLocaleString()}</td>
                             <td>
-                                <img src={plate.imageUrl} alt="Fotograma de la placa" width="100" />
+                                <img src={plate.imagen} alt="Fotograma de la placa" width="100" />
                             </td>
                         </tr>
                     ))}
